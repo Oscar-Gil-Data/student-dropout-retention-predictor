@@ -36,3 +36,7 @@ Thumbs.db
 .vscode/
 .idea/
 .venv/
+dbt/target/
+dbt/logs/
+dbt/dbt_packages/
+*.duckdb
