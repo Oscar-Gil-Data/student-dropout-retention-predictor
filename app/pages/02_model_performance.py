@@ -38,10 +38,11 @@ y_pred_rf = preds['y_pred_rf'].values
 y_proba_lr = lr.predict_proba(X_test)
 y_proba_rf = rf.predict_proba(X_test)
 
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "Confusion matrices",
     "Per-class F1",
     "ROC curves",
+    "Feature importance",
     "McNemar's test"
 ])
 
@@ -128,7 +129,7 @@ with tab3:
     st.pyplot(fig, clear_figure=True)
 
 # ── Tab 4: McNemar ────────────────────────────────────────────────────
-with tab4:
+with tab5:
     from statsmodels.stats.contingency_tables import mcnemar
 
     lr_correct = (preds['y_pred_lr'] == preds['y_test']).astype(int)
@@ -199,4 +200,62 @@ with tab4:
     **Interpretation:** RF is statistically superior overall (p=0.0042) and wins on Dropout
     and Graduate. LR is significantly better on the Enrolled class (p<0.0001) -- the minority
     class most relevant to early intervention. Model selection should be use-case driven.
+    """)
+
+# ── Tab 5: Feature importance ─────────────────────────────────────────
+with tab4:
+    st.markdown("#### Random Forest -- feature importance")
+    st.caption("Mean decrease in impurity across all trees. Does not indicate direction.")
+
+    importance_df = pd.DataFrame({
+        'feature':    X_test.columns,
+        'importance': rf.feature_importances_
+    }).sort_values('importance', ascending=True).tail(15)
+
+    fig, ax = plt.subplots(figsize=(9, 6))
+    ax.barh(importance_df['feature'], importance_df['importance'], color='#4A9B6F', alpha=0.85)
+    ax.set_xlabel('Mean decrease in impurity')
+    ax.set_title('Random Forest -- top 15 feature importances', fontweight='bold')
+    ax.spines['top'].set_visible(False)
+    ax.spines['right'].set_visible(False)
+    plt.tight_layout()
+    st.pyplot(fig, clear_figure=True)
+
+    st.divider()
+    st.markdown("#### Logistic Regression -- coefficients per class")
+    st.caption("Red = pushes toward that class. Blue = pushes away from that class.")
+
+    coef_df = pd.DataFrame(
+        lr.coef_,
+        index=classes,
+        columns=X_test.columns
+    ).T
+
+    fig, axes = plt.subplots(1, 3, figsize=(16, 6))
+    for i, cls in enumerate(classes):
+        top = coef_df[cls].abs().sort_values(ascending=True).tail(15)
+        colors = ['#D85A30' if coef_df[cls][feat] > 0 else '#378ADD' for feat in top.index]
+        axes[i].barh(top.index, coef_df[cls][top.index], color=colors)
+        axes[i].axvline(x=0, color='black', linewidth=0.8)
+        axes[i].set_title(f'{cls} coefficients', fontweight='bold')
+        axes[i].set_xlabel('Coefficient value')
+        axes[i].spines['top'].set_visible(False)
+        axes[i].spines['right'].set_visible(False)
+
+    plt.suptitle(
+        'Logistic Regression -- top 15 coefficients per class',
+        fontsize=13, fontweight='bold'
+    )
+    plt.tight_layout()
+    st.pyplot(fig, clear_figure=True)
+
+    st.markdown("""
+    **Reading the coefficient chart:**
+    A positive coefficient (red) increases the log-odds of that class.
+    A negative coefficient (blue) decreases it. The magnitude indicates
+    how strongly the feature influences the prediction.
+
+    Note that `tuition_fees_up_to_date` appears as the strongest negative
+    predictor for Dropout and the strongest positive predictor for Graduate --
+    the same feature doing double duty, consistent with the EDA financial signals.
     """)

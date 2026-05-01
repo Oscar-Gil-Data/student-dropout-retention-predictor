@@ -26,6 +26,11 @@ model_name = st.sidebar.selectbox(
 )
 model = load_model(model_name)
 
+# Load training data as background for LinearExplainer (LR only)
+import os, pandas as pd
+_base = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../..')
+X_train_bg = pd.read_parquet(os.path.join(_base, 'data/processed/X_train.parquet'))
+
 # ── Sidebar: key features ────────────────────────────────────────────
 st.sidebar.divider()
 st.sidebar.header("Student profile")
@@ -153,7 +158,7 @@ with col2:
     st.markdown("#### SHAP feature impact")
     st.caption(f"Explaining the **{pred}** prediction")
     try:
-        shap_values = get_shap_values(model, model_name, input_df)
+        shap_values = get_shap_values(model, model_name, input_df, X_train_bg)
         plot_waterfall(shap_values, pred_idx, pred)
     except Exception as e:
         st.info(f"SHAP explanation unavailable: {e}")
