@@ -11,7 +11,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Dropout', 'Enrolled', 'Graduate']
+              arguments:
+                values: ['Dropout', 'Enrolled', 'Graduate']
 
   - name: int_economic_context
     description: >
@@ -60,7 +61,8 @@ models:
         tests:
           - not_null
           - accepted_values:
-              values: ['Dropout', 'Enrolled', 'Graduate']
+              arguments:
+                values: ['Dropout', 'Enrolled', 'Graduate']
       - name: sem1_approval_rate
         description: Ratio of units approved to units enrolled in semester 1
       - name: sem2_approval_rate

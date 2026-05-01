@@ -10,7 +10,7 @@ with base as (
             cast(course_id as varchar) || '|' ||
             cast(attendance_type as varchar)
         ) as program_key
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 )
 
 select

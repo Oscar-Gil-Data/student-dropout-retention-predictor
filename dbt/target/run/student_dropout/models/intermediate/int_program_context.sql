@@ -1,4 +1,7 @@
--- int_program_context.sql
+
+  
+  create view "student_dropout"."main_intermediate"."int_program_context__dbt_tmp" as (
+    -- int_program_context.sql
 -- Extracts course/program attributes from the student-level flat file.
 -- Course is a property of the program, not the individual student.
 
@@ -10,7 +13,7 @@ with base as (
             cast(course_id as varchar) || '|' ||
             cast(attendance_type as varchar)
         ) as program_key
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 )
 
 select
@@ -43,3 +46,4 @@ select
         else 'Other'
     end as course_name
 from base
+  );

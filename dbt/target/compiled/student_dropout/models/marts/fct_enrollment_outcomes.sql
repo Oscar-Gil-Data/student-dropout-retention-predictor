@@ -6,15 +6,15 @@ with students as (
     select
         row_number() over () as student_key,
         *
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 ),
 
 program_keys as (
-    select * from {{ ref('int_program_context') }}
+    select * from "student_dropout"."main_intermediate"."int_program_context"
 ),
 
 economic_keys as (
-    select * from {{ ref('int_economic_context') }}
+    select * from "student_dropout"."main_intermediate"."int_economic_context"
 )
 
 select

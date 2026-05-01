@@ -1,4 +1,7 @@
--- stg_students.sql
+
+  
+  create view "student_dropout"."main_staging"."stg_students__dbt_tmp" as (
+    -- stg_students.sql
 -- Staging layer: rename columns to snake_case, cast types, no business logic.
 -- Source: UCI flat file read directly via DuckDB read_csv
 -- Notes:
@@ -114,3 +117,4 @@ renamed as (
 )
 
 select * from renamed
+  );

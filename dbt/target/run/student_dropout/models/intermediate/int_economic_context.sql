@@ -1,4 +1,7 @@
--- int_economic_context.sql
+
+  
+  create view "student_dropout"."main_intermediate"."int_economic_context__dbt_tmp" as (
+    -- int_economic_context.sql
 -- Extracts macroeconomic features into their own grain.
 -- These are period-level attributes shared across students —
 -- keeping them in the fact table would be semantically incorrect
@@ -15,7 +18,7 @@ with base as (
             cast(inflation_rate as varchar) || '|' ||
             cast(gdp as varchar)
         ) as economic_context_key
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 )
 
 select
@@ -24,3 +27,4 @@ select
     inflation_rate,
     gdp
 from base
+  );

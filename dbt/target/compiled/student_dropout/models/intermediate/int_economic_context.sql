@@ -15,7 +15,7 @@ with base as (
             cast(inflation_rate as varchar) || '|' ||
             cast(gdp as varchar)
         ) as economic_context_key
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 )
 
 select

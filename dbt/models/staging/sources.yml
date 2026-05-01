@@ -1,0 +1,13 @@
+version: 2
+
+sources:
+  - name: raw
+    description: UCI Student Dropout raw CSV loaded via DuckDB read_csv
+    schema: main
+    tables:
+      - name: students
+        description: >
+          Raw flat file from the UCI Predict Students Dropout and Academic Success dataset.
+          4424 students, 36 features covering academic performance, demographics,
+          socioeconomic background, and macroeconomic context.
+        identifier: "read_csv('../data/raw/data.csv', header=true, encoding='utf-8-bom', delim=';')"

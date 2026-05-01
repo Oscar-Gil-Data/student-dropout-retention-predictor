@@ -1,4 +1,13 @@
--- fct_enrollment_outcomes.sql
+
+  
+    
+    
+
+    create  table
+      "student_dropout"."main_marts"."fct_enrollment_outcomes__dbt_tmp"
+  
+    as (
+      -- fct_enrollment_outcomes.sql
 -- Fact table at student grain.
 -- Holds academic performance metrics, foreign keys to dimensions, and the outcome target.
 
@@ -6,15 +15,15 @@ with students as (
     select
         row_number() over () as student_key,
         *
-    from {{ ref('stg_students') }}
+    from "student_dropout"."main_staging"."stg_students"
 ),
 
 program_keys as (
-    select * from {{ ref('int_program_context') }}
+    select * from "student_dropout"."main_intermediate"."int_program_context"
 ),
 
 economic_keys as (
-    select * from {{ ref('int_economic_context') }}
+    select * from "student_dropout"."main_intermediate"."int_economic_context"
 )
 
 select
@@ -72,3 +81,6 @@ left join economic_keys e
     on e.unemployment_rate = s.unemployment_rate
     and e.inflation_rate = s.inflation_rate
     and e.gdp = s.gdp
+    );
+  
+  
