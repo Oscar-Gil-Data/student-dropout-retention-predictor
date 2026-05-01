@@ -1,55 +1,13 @@
 -- stg_students.sql
 -- Staging layer: rename columns to snake_case, cast types, no business logic.
--- Source: UCI flat file read directly via DuckDB read_csv
--- Notes:
---   - UTF-8 BOM on first column stripped via columns parameter (explicit schema)
---   - Trailing tab on 'Daytime/evening attendance' stripped via trim()
---   - Semicolon delimiter confirmed from raw file inspection
+-- Source: data_clean.csv -- BOM and trailing tab stripped via Python prep script.
+-- See data/raw/data_clean.csv for the cleaned source file.
 
 with source as (
     select * from read_csv(
-        '../data/raw/data.csv',
+        '../data/raw/data_clean.csv',
         header = true,
-        delim = ';',
-        columns = {
-            'Marital status': 'INTEGER',
-            'Application mode': 'INTEGER',
-            'Application order': 'INTEGER',
-            'Course': 'INTEGER',
-            'Daytime/evening attendance': 'INTEGER',
-            'Previous qualification': 'INTEGER',
-            'Previous qualification (grade)': 'DOUBLE',
-            'Admission grade': 'DOUBLE',
-            'Nacionality': 'INTEGER',
-            'Gender': 'INTEGER',
-            'Age at enrollment': 'INTEGER',
-            'International': 'INTEGER',
-            'Displaced': 'INTEGER',
-            'Educational special needs': 'INTEGER',
-            'Debtor': 'INTEGER',
-            'Tuition fees up to date': 'INTEGER',
-            'Scholarship holder': 'INTEGER',
-            'Mother''s qualification': 'INTEGER',
-            'Father''s qualification': 'INTEGER',
-            'Mother''s occupation': 'INTEGER',
-            'Father''s occupation': 'INTEGER',
-            'Curricular units 1st sem (credited)': 'INTEGER',
-            'Curricular units 1st sem (enrolled)': 'INTEGER',
-            'Curricular units 1st sem (evaluations)': 'INTEGER',
-            'Curricular units 1st sem (approved)': 'INTEGER',
-            'Curricular units 1st sem (grade)': 'DOUBLE',
-            'Curricular units 1st sem (without evaluations)': 'INTEGER',
-            'Curricular units 2nd sem (credited)': 'INTEGER',
-            'Curricular units 2nd sem (enrolled)': 'INTEGER',
-            'Curricular units 2nd sem (evaluations)': 'INTEGER',
-            'Curricular units 2nd sem (approved)': 'INTEGER',
-            'Curricular units 2nd sem (grade)': 'DOUBLE',
-            'Curricular units 2nd sem (without evaluations)': 'INTEGER',
-            'Unemployment rate': 'DOUBLE',
-            'Inflation rate': 'DOUBLE',
-            'GDP': 'DOUBLE',
-            'Target': 'VARCHAR'
-        }
+        delim = ';'
     )
 ),
 

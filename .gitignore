@@ -1,5 +1,6 @@
 # Data — never commit the raw dataset
 data/raw/
+data/raw/data_clean.csv
 data/processed/
 *.csv
 *.parquet
