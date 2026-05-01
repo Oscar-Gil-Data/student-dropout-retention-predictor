@@ -1,0 +1,67 @@
+version: 2
+
+models:
+  - name: stg_students
+    description: >
+      Staging model for the UCI student dropout dataset. Renames raw columns
+      to snake_case and casts types. No business logic applied at this layer.
+    columns:
+      - name: outcome
+        description: Target variable — Dropout, Enrolled, or Graduate
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Dropout', 'Enrolled', 'Graduate']
+
+  - name: int_economic_context
+    description: >
+      Distinct macroeconomic periods derived from the staging layer.
+      GDP, inflation, and unemployment are period-level attributes shared
+      across students — extracting them avoids row-level redundancy in the fact.
+    columns:
+      - name: economic_context_key
+        description: Surrogate key generated from unemployment_rate, inflation_rate, gdp
+        tests:
+          - not_null
+          - unique
+
+  - name: int_program_context
+    description: >
+      Distinct course/attendance combinations with decoded labels.
+      Separates program-level facts from student-level facts.
+    columns:
+      - name: program_key
+        description: Surrogate key generated from course_id and attendance_type
+        tests:
+          - not_null
+          - unique
+
+  - name: int_student_demographics
+    description: >
+      Student-level demographic and household attributes.
+      Row number used as surrogate key since the dataset has no natural student ID.
+    columns:
+      - name: student_key
+        tests:
+          - not_null
+          - unique
+
+  - name: fct_enrollment_outcomes
+    description: >
+      Fact table at student grain. Contains academic performance metrics,
+      financial indicators, foreign keys to all dimensions, and the outcome target.
+      Primary artifact for modeling and reporting.
+    columns:
+      - name: student_key
+        tests:
+          - not_null
+          - unique
+      - name: outcome
+        tests:
+          - not_null
+          - accepted_values:
+              values: ['Dropout', 'Enrolled', 'Graduate']
+      - name: sem1_approval_rate
+        description: Ratio of units approved to units enrolled in semester 1
+      - name: sem2_approval_rate
+        description: Ratio of units approved to units enrolled in semester 2

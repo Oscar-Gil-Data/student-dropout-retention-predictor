@@ -1,0 +1,36 @@
+# Data — never commit the raw dataset
+data/raw/
+data/processed/
+*.csv
+*.parquet
+
+# dbt — never commit credentials
+dbt/profiles.yml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+.venv/
+venv/
+env/
+.env
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Models — serialized artifacts can be large
+models/artifacts/*.pkl
+models/artifacts/*.joblib
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
