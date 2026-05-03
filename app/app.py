@@ -50,7 +50,7 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 st.markdown('<div class="main-title">Student Dropout & Retention Predictor</div>', unsafe_allow_html=True)
-st.markdown('<div class="main-subtitle">UCI Dataset &nbsp;·&nbsp; dbt + BigQuery + Python + Streamlit &nbsp;·&nbsp; oscargildata.com</div>', unsafe_allow_html=True)
+st.markdown('<div class="main-subtitle">UCI Dataset &nbsp;·&nbsp; dbt + DuckDB + Python + Streamlit &nbsp;·&nbsp; [oscargildata.com](http://oscargildata.com)</div>', unsafe_allow_html=True)
 
 pg = st.navigation([
     st.Page("pages/01_prediction.py",        title="Prediction",         icon="🎯"),
