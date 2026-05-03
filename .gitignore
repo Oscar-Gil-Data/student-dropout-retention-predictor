@@ -1,9 +1,11 @@
 # Data — never commit the raw dataset
 data/raw/
 data/raw/data_clean.csv
-data/processed/
 *.csv
-*.parquet
+
+# Processed data — allow parquet artifacts for app deployment
+!data/processed/*.parquet
+!data/processed/meta.json
 
 # dbt — never commit credentials
 dbt/profiles.yml
@@ -25,8 +27,8 @@ env/
 *.ipynb_checkpoints
 
 # Models — serialized artifacts can be large
-models/artifacts/*.pkl
-models/artifacts/*.joblib
+# models/artifacts/*.pkl   <-- commented out
+# models/artifacts/*.joblib
 
 # OS
 .DS_Store
