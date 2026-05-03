@@ -16,7 +16,7 @@ Raw CSV (UCI)
     ▼
 [ Layer 1 -- dbt ]
 Staging → Intermediate → Marts
-(BigQuery-native normalization, dimensional modeling)
+(DuckDB-native normalization, dimensional modeling)
     │
     ▼
 [ Layer 2 -- Python Modeling ]
@@ -67,7 +67,7 @@ stg_students
 - Program and attendance mode extracted into `dim_program` -- separates course-level facts from student-level facts
 - `fct_enrollment_outcomes` is at student grain with foreign keys to all dimensions and the target outcome
 
-> dbt models in this repo are written for BigQuery SQL dialect. See `dbt/profiles.yml.example` to connect a live warehouse.
+> dbt models in this repo are written for DuckDB SQL dialect and run locally without cloud infrastructure. The dimensional model is designed to be portable to BigQuery for production deployment. See `dbt/profiles.yml.example` to connect either adapter.
 
 ---
 
@@ -124,8 +124,8 @@ data/raw/data.csv
 
 | Layer | Tools |
 |---|---|
-| Analytics Engineering | dbt (BigQuery dialect), SQL |
-| Data Platform | Google BigQuery |
+| Analytics Engineering | dbt (DuckDB dialect), SQL |
+| Data Platform | DuckDB (local); designed for BigQuery in production |
 | Modeling | Python, scikit-learn, pandas, NumPy |
 | Explainability | SHAP |
 | Statistical Testing | McNemar's test (statsmodels) |
